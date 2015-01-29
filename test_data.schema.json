@@ -1,0 +1,71 @@
+{
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "required":true,
+    "additionalProperties":false,
+    "properties":{
+        "build_config": { 
+            "type":"array",
+            "required":true,
+            "items":
+                {
+                    "type":"object",
+                    "required":true,
+                    "additionalProperties":false,
+                    "properties":{
+                        "machine_name": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "compiler": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "boost_version": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "allocator": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "tests": {
+                            "type":"array",
+                            "required":true,
+                            "items":
+                            {
+                                "type":"object",
+                                "required":true,
+                                "additionalProperties":false,
+                                "properties":{
+                                    "test_name": {
+                                        "type":"string",
+                                        "required":true
+                                    },
+                                    "num_threads_per_locality": {
+                                        "type":"integer",
+                                        "required":true
+                                    },
+                                    "num_localities_per_machine": {
+                                        "type":"integer",
+                                        "required":true
+                                    },
+                                    "num_machines": {
+                                        "type":"integer",
+                                        "required":true
+                                    },
+                                    "additional_parameters": {
+                                        "type":"object",
+                                        "required":false,
+                                        "additionalProperties":true,
+                                        "properties":{
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+    }
+}

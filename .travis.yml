@@ -1,0 +1,4 @@
+language: python
+
+script: ./validate_test_data.py
+
