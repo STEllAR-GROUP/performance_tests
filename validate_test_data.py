@@ -12,7 +12,7 @@ def validate(test_file, v):
         test_data = json.load(f)
     
      
-    errors = sorted(v.iter_errors(slaves), key=lambda e: e.path)
+    errors = sorted(v.iter_errors(test_data), key=lambda e: e.path)
     
     if len(errors) == 0:
         return
@@ -33,6 +33,7 @@ if __name__ == "__main__":
         test_schema = json.load(f)
     test_validator = jsonschema.Draft3Validator(test_schema)
         
-    for data in os.listdir('test_data'):
-        if data.endswith('.json'):
-            validate(data, test_validator)
+    for path, subdirs, files in os.walk('test_data'):
+        for testfile in files:
+            if testfile.endswith('.json'):
+                validate(path + os.sep + testfile, test_validator)

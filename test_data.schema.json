@@ -4,7 +4,7 @@
     "required":true,
     "additionalProperties":false,
     "properties":{
-        "build_config": { 
+        "build_configurations": { 
             "type":"array",
             "required":true,
             "items":
@@ -21,11 +21,19 @@
                             "type":"string",
                             "required":true
                         },
-                        "boost_version": {
+                        "boost": {
                             "type":"string",
                             "required":true
                         },
                         "allocator": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "branch": {
+                            "type":"string",
+                            "required":true
+                        },
+                        "hpx_commit_id": {
                             "type":"string",
                             "required":true
                         },
@@ -43,15 +51,15 @@
                                         "required":true
                                     },
                                     "num_threads_per_locality": {
-                                        "type":"integer",
+                                        "type":"number",
                                         "required":true
                                     },
-                                    "num_localities_per_machine": {
-                                        "type":"integer",
+                                    "num_localities_per_node": {
+                                        "type":"number",
                                         "required":true
                                     },
-                                    "num_machines": {
-                                        "type":"integer",
+                                    "num_nodes": {
+                                        "type":"number",
                                         "required":true
                                     },
                                     "additional_parameters": {
@@ -60,6 +68,14 @@
                                         "additionalProperties":true,
                                         "properties":{
                                         }
+                                    },
+                                    "timestamp": {
+                                        "type":"number",
+                                        "required":true
+                                    },
+                                    "result": {
+                                        "type":"number",
+                                        "required":true
                                     }
                                 }
                             }
