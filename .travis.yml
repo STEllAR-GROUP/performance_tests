@@ -1,4 +1,8 @@
 language: python
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y python-jsonschema
+
 script: ./validate_test_data.py
 
