@@ -1,7 +1,7 @@
 language: python
 
 install:
-  - sudo pip install jsonschema
+  - pip install jsonschema
 
 script: ./validate_test_data.py
 
