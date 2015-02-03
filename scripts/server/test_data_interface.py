@@ -4,17 +4,12 @@ import jsonschema
 import os
 from sets import Set
 
-platform_names = Set()
-branches = Set()
-test_names = Set()
+# Create schema validator
+with open('../../test_data.schema.json') as f:
+    schema = json.load(f)
+schema_validator = jsonschema.Draft3Validator(schema)
 
-def generate_platform_name(machine_name, compiler, boost, allocator):
-    platform_name = machine_name + ' - '    \
-                  + compiler + ' - '        \
-                  + boost + ' - '           \
-                  + allocator
-    return platform_name
- 
+
 def generate_test_name(short_test_name, threads_per_locality, localities_per_node, nodes, params):
     full_test_name = short_test_name + ' '              \
                    + str(threads_per_locality) + '/'    \
@@ -27,10 +22,19 @@ def generate_test_name(short_test_name, threads_per_locality, localities_per_nod
                        + key + "=" + param
 
     return full_test_name
+
+def get_filenames():
+    filenames = []
+    for path, subdirs, files in os.walk('../../test_data'):
+        for testfile in files:
+            if testfile.endswith('.json'):
+                filenames.append(path + os.sep + testfile)
+    return filenames
+    
     
 
-def validate_test_file(file_json, filename, validator):
-    errors = sorted(validator.iter_errors(file_json), key=lambda e: e.path)
+def validate_test_file(file_json, filename):
+    errors = sorted(schema_validator.iter_errors(file_json), key=lambda e: e.path)
     if len(errors) != 0:
         print("ERROR: '" + filename + "' seems to be invalid!")
         print()
@@ -38,29 +42,51 @@ def validate_test_file(file_json, filename, validator):
             print(error)
         exit(1)
 
-    
-
-def read_test_file_roughly(filename, validator):
-    print("Reading '" + filename + "' ...")
-
+def open_testfile(filename):
     # Open testfile json
     with open(filename) as f:
         file_json = json.load(f)
 
     # Validate testfile
-    validate_test_file(file_json, filename, validator)
+    validate_test_file(file_json, filename)
+
+    return file_json
+
+def get_platform_name(build_config):
+    platform_name = build_config['machine_name'] + ' - '    \
+                  + build_config['compiler'] + ' - '        \
+                  + build_config['boost'] + ' - '           \
+                  + build_config['allocator']
+    return platform_name
+ 
+def get_build_configs(file_content):
+    return file_content['build_configurations']    
+
+def get_branch_name(build_config):
+    return build_config['branch']
+
+def get_hpx_commit_id(build_config):
+    return build_config['hpx_commit_id']
+    
+platform_names = Set()
+branches = Set()
+test_names = Set()
+
+def read_test_file_roughly(filename):
+    print("Reading '" + filename + "' ...")
+
+    file_json = open_testfile(filename)
 
     # Read file to tables
     build_configs = file_json['build_configurations']
     for build_config in build_configs:
         # generate platform name from config
-        platform_name = generate_platform_name(build_config['machine_name'],    \
-                                               build_config['compiler'],        \
-                                               build_config['boost'],           \
-                                               build_config['allocator'])
+        platform_name = get_platform_name(build_config)
         platform_names.add(platform_name)
+
         branch = build_config['branch']
         branches.add(branch)
+
         tests = build_config['tests']
         for test in tests:
             test_name = generate_test_name(test['test_name'],                   \
@@ -71,17 +97,11 @@ def read_test_file_roughly(filename, validator):
             test_names.add(test_name)
 
 def read_test_data_roughly():
-    with open('../../test_data.schema.json') as f:
-        schema = json.load(f)
-
-    schema_validator = jsonschema.Draft3Validator(schema)
 
     platform_names.clear()
 
-    for path, subdirs, files in os.walk('../../test_data'):
-        for testfile in files:
-            if testfile.endswith('.json'):
-                read_test_file_roughly(path + os.sep + testfile, schema_validator)
+    for filename in get_filenames():
+        read_test_file_roughly(filename)
 
 
 
