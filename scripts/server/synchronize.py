@@ -32,11 +32,24 @@ for filename in test_data_interface.get_filenames():
         # create build entry in database if necessary
         build_id = db_interface.ensure_build_exists(branch_name, hpx_commit_id)
 
-        #TODO
-        # see if test exists
-        # create test
-        # see if test_run exist
-        # create test_run
+        # go through all submitted tests
+        tests = test_data_interface.get_tests(build_config)
+        for test_data in tests:
+            
+            # get test name
+            test_name = test_data_interface.get_test_name(test_data)
+
+            # create test in database if necessary
+            test_id = db_interface.ensure_test_exists(test_name)
+
+            # get test timestamp
+            test_time = test_data_interface.get_test_time(test_data)
+
+            # get test result
+            test_result = test_data_interface.get_test_result(test_data)
+
+            db_interface.insert_testrun(build_id, platform_id, test_id,         \
+                                        test_time, test_result)
 
 
 platforms = db_interface.get_machine_names()
@@ -54,4 +67,4 @@ for platform in platforms:
 
 
 # At the end, commit changes to database
-#db_interface.commit()
+db_interface.commit()

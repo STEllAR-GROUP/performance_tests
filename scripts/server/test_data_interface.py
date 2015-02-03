@@ -10,19 +10,6 @@ with open('../../test_data.schema.json') as f:
 schema_validator = jsonschema.Draft3Validator(schema)
 
 
-def generate_test_name(short_test_name, threads_per_locality, localities_per_node, nodes, params):
-    full_test_name = short_test_name + ' '              \
-                   + str(threads_per_locality) + '/'    \
-                   + str(localities_per_node) + '/'     \
-                   + str(nodes)
-
-    for key in sorted(params.keys()):
-        param = params[key]
-        full_test_name = full_test_name + ' '   \
-                       + key + "=" + param
-
-    return full_test_name
-
 def get_filenames():
     filenames = []
     for path, subdirs, files in os.walk('../../test_data'):
@@ -67,7 +54,30 @@ def get_branch_name(build_config):
 
 def get_hpx_commit_id(build_config):
     return build_config['hpx_commit_id']
-    
+ 
+def get_tests(build_config):
+    return build_config['tests']
+
+def get_test_name(test_data):
+    full_test_name = test_data['test_name'] + ' '                               \
+                   + str(test_data['num_threads_per_locality']) + '/'           \
+                   + str(test_data['num_localities_per_node']) + '/'            \
+                   + str(test_data['num_nodes'])
+
+    params = test_data['additional_parameters']
+    for key in sorted(params.keys()):
+        param = params[key]
+        full_test_name = full_test_name + ' '   \
+                       + key + "=" + param
+
+    return full_test_name
+
+def get_test_time(test_data):
+    return test_data['timestamp']
+
+def get_test_result(test_data):
+    return test_data['result']
+   
 platform_names = Set()
 branches = Set()
 test_names = Set()
@@ -89,11 +99,7 @@ def read_test_file_roughly(filename):
 
         tests = build_config['tests']
         for test in tests:
-            test_name = generate_test_name(test['test_name'],                   \
-                                           test['num_threads_per_locality'],    \
-                                           test['num_localities_per_node'],     \
-                                           test['num_nodes'],                   \
-                                           test['additional_parameters'])
+            test_name = get_test_name(test)
             test_names.add(test_name)
 
 def read_test_data_roughly():

@@ -122,8 +122,61 @@ def ensure_build_exists(branch_name, hpx_commit_id):
         cur.execute("INSERT INTO builds (ref_changeset, branch_id, date_added)" \
                     "VALUES ('" + hpx_commit_id + "', " + str(branch_id) + ", " \
                     + str(current_time()) + ")")
+        cur.execute("SELECT id FROM builds WHERE branch_id=" + str(branch_id)   \
+                                 + " AND ref_changeset='" + hpx_commit_id + "'")
+        build_ids = cur.fetchall()
+    build_id = build_ids[0][0]
 
+    existing_builds[(branch_name, hpx_commit_id)] = build_id
+
+    return build_id
    
+existing_tests = {}
+def ensure_test_exists(test_name):
+    test_name = db.escape_string(test_name)
+    
+    # prevent the repeated execution of the same query by caching
+    if test_name in existing_tests:
+        return existing_tests[test_name]
+
+    # query the test_id
+    cur.execute("SELECT id FROM tests WHERE name='" + test_name + "'")
+    test_ids = cur.fetchall()
+    if len(test_ids) < 1:
+        cur.execute("INSERT INTO tests (name) VALUES ('" + test_name + "')")
+        cur.execute("SELECT id FROM tests WHERE name='" + test_name + "'")
+        test_ids = cur.fetchall()
+    test_id = test_ids[0][0]
+
+    existing_tests[test_name] = test_id
+
+    return test_id
+
+def insert_testrun(build_id, platform_id, test_id, test_time, test_result):
+    
+    # check if test already exists
+    cur.execute("SELECT id FROM test_runs WHERE "                 \
+                    + "build_id='"   + str(build_id)    + "' AND "\
+                    + "test_id='"    + str(test_id)     + "' AND "\
+                    + "machine_id='" + str(platform_id) + "' AND "\
+                    + "date_run='"   + str(test_time)   + "'")
+    test_ids = cur.fetchall()
+    if len(test_ids) < 1:
+        # if not, add test result to database
+        cur.execute("INSERT INTO test_runs (build_id, test_id, machine_id, "    \
+                                           "date_run, average) "                \
+                    "VALUES (" + str(build_id)    + "," \
+                               + str(test_id)     + "," \
+                               + str(platform_id) + "," \
+                               + str(test_time)   + "," \
+                               + str(test_result) + ")")
+
+    print("New testrun:")
+    print("\tbuild_id:    " + str(build_id))
+    print("\tplatform_id: " + str(platform_id))
+    print("\ttest_id:     " + str(test_id))
+    print("\ttest_time:   " + str(test_time))
+    print("\ttest_result: " + str(test_result))
 
 def clear_database():
     cur.execute("DELETE FROM builds")
