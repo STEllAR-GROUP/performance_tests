@@ -6,7 +6,7 @@ import test_data_interface
 
 
 # Delete everything.
-# There will soon be a better way, but until then, this should work.
+# There will be a better way soon, but this should work for now.
 db_interface.clear_database()
 
 
