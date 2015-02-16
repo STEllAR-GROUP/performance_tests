@@ -143,7 +143,8 @@ def ensure_test_exists(test_name):
     cur.execute("SELECT id FROM tests WHERE name='" + test_name + "'")
     test_ids = cur.fetchall()
     if len(test_ids) < 1:
-        cur.execute("INSERT INTO tests (name) VALUES ('" + test_name + "')")
+        cur.execute("INSERT INTO tests (name, pretty_name) " +  \
+                    "VALUES ('" + test_name + "', '" + test_name + "')")
         cur.execute("SELECT id FROM tests WHERE name='" + test_name + "'")
         test_ids = cur.fetchall()
     test_id = test_ids[0][0]
@@ -171,12 +172,12 @@ def insert_testrun(build_id, platform_id, test_id, test_time, test_result):
                                + str(test_time)   + "," \
                                + str(test_result) + ")")
 
-    print("New testrun:")
-    print("\tbuild_id:    " + str(build_id))
-    print("\tplatform_id: " + str(platform_id))
-    print("\ttest_id:     " + str(test_id))
-    print("\ttest_time:   " + str(test_time))
-    print("\ttest_result: " + str(test_result))
+        print("New testrun:")
+        print("\tbuild_id:    " + str(build_id))
+        print("\tplatform_id: " + str(platform_id))
+        print("\ttest_id:     " + str(test_id))
+        print("\ttest_time:   " + str(test_time))
+        print("\ttest_result: " + str(test_result))
 
 def clear_database():
     cur.execute("DELETE FROM builds")
@@ -189,6 +190,8 @@ def clear_database():
     cur.execute("DELETE FROM tests")
     cur.execute("DELETE FROM pagesets")
     cur.execute("DELETE FROM pages")
+    cur.execute("DELETE FROM valid_test_combinations")
+    cur.execute("DELETE FROM valid_test_combinations_updated")
     
 def commit():
     db.commit()

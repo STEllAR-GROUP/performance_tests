@@ -4,10 +4,13 @@
 import db_interface
 import test_data_interface
 
+import refresh_test_combos
 
-# Delete everything.
-# There will be a better way soon, but this should work for now.
-db_interface.clear_database()
+# Uncomment this line for complete database reset.
+# This should only be necessary in the case of a deletion.
+# Don't use this too much, as it messes with the ids horribly.
+# (And with that destroys every static html link to a graph setup)
+#db_interface.clear_database()
 
 
 for filename in test_data_interface.get_filenames():
@@ -52,19 +55,17 @@ for filename in test_data_interface.get_filenames():
                                         test_time, test_result)
 
 
-platforms = db_interface.get_machine_names()
-for platform in platforms:
-    platform_name = platform[0]
-    
-    platform_id = db_interface.ensure_platform_exists(platform_name)
-    print(str(platform_id) + ": " + platform_name)
-
-
-
-
-
-
+#platforms = db_interface.get_machine_names()
+#for platform in platforms:
+#    platform_name = platform[0]
+#    
+#    platform_id = db_interface.ensure_platform_exists(platform_name)
+#    print(str(platform_id) + ": " + platform_name)
 
 
 # At the end, commit changes to database
 db_interface.commit()
+
+
+# Refresh the test combinations
+refresh_test_combos.refresh()
