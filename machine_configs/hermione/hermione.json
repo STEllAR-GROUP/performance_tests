@@ -1,6 +1,6 @@
 {
     "machine_name": "hermione",
-    "invocation_command": "/var/run.sh ${THREADS} ${LOCALITIES} ${NODES} \"${INVOCATION_COMMAND}\"",
+    "invocation_command": "/var/run.sh ${THREADS} ${LOCALITIES} ${NODES} \"${HPX_PROGRAM}\"",
     "invoke_parallel": true,
     "builds": [
         {
