@@ -12,6 +12,10 @@
             "type":"string",
             "required":true
         },
+        "invoke_parallel": {
+            "type":"boolean",
+            "required":true
+        },
         "builds": {
             "type":"array",
             "required":true,

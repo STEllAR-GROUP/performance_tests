@@ -1,6 +1,7 @@
 {
     "machine_name": "hermione",
     "invocation_command": "/var/run.sh ${THREADS} ${LOCALITIES} ${NODES} \"${INVOCATION_COMMAND}\"",
+    "invoke_parallel": true,
     "builds": [
         {
             "compiler": "gcc 4.9",
