@@ -51,12 +51,12 @@
                 {
                     "type":"array",
                     "required":true,
+                    "maxItems":3,
+                    "minItems":3,
                     "items":
                         {
                             "type":"number",
-                            "required":true,
-                            "maxItems":3,
-                            "minItems":3
+                            "required":true
                         }
                 }
         }
