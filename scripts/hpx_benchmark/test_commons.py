@@ -69,9 +69,6 @@ def send_result(results):
     if not isinstance(results, list):
         results = [results]
 
-    error("bla1")
-    error(results)
-    error("bla")
     print(json.dumps(results))
 
 
