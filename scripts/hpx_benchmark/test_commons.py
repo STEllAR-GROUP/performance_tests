@@ -3,13 +3,19 @@ from __future__ import print_function
 import os
 import sys
 import subprocess
+import json
+import time
 
-def get_config():
+def error(msg):
+    print(msg, file=sys.stderr)
+
+def get_config(test_name):
     if len(sys.argv) != 6:
-        print("Error: Invalid command line arguments!", file=sys.stderr)
+        error("Error: Invalid command line arguments!")
         exit(1)
 
-    config = { "hpx_dir":             sys.argv[1],
+    config = { "name":                test_name,
+               "hpx_dir":             sys.argv[1],
                "threads":             sys.argv[2],
                "localities":          sys.argv[3],
                "nodes":               sys.argv[4],
@@ -39,10 +45,33 @@ def run_command(command):
     
     out,err = p.communicate()
     if p.returncode != 0:
-        print("Test failed: ", file=sys.stderr)
-        print(err, file=sys.stderr)
+        error("Test failed: ")
+        error(err)
         exit(1)
 
     return out
+
+def build_test_result(config, parameters, result):
+
+    result = { "test_name":                 config["name"],
+               "num_threads_per_locality":  int(config["threads"]),
+               "num_localities_per_node":   int(config["localities"]),
+               "num_nodes":                 int(config["nodes"]),
+               "timestamp":                 int(time.time()),
+               "result":                    float(result)}
+
+    if parameters:
+        result["additional_parameters"] = parameters,
+
+    return result
+
+def send_result(results):
+    if not isinstance(results, list):
+        results = [results]
+
+    error("bla1")
+    error(results)
+    error("bla")
+    print(json.dumps(results))
 
 

@@ -9,7 +9,7 @@ import subprocess
 
 scriptpath = os.path.dirname(os.path.realpath(__file__))
 
-active_tests = [ "./test.py" ]
+active_tests = [ "./osu_latency.py" ]
 
 
 

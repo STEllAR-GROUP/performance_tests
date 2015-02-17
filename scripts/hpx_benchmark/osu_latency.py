@@ -1,13 +1,12 @@
 #! /usr/bin/env python
 
-from __future__ import print_function
-
 from test_commons import *
+
 
 if __name__ == "__main__":
     
     # Get config
-    config = get_config()
+    config = get_config("osu_latency")
 
     # Get executable path
     hpx_executable = get_hpx_executable(config, "osu_latency")
@@ -20,12 +19,16 @@ if __name__ == "__main__":
 
     # Parse results
     #TODO 
+    results = []
+    results.append(build_test_result(config, {}, 1.0))
+    send_result(results)
 
-    print(invocation_command, file=sys.stderr)
 
-    print("[{\"bla\": \"bla2\"}]")
+    error(invocation_command)
+
     for arg in sys.argv:
-        print("\t" + arg, file=sys.stderr)
+        error("\t" + arg)
 
-    print(out, file=sys.stderr)
+    error(out)
+    
 #    exit(1)
