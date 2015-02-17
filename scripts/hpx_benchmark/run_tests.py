@@ -41,6 +41,20 @@ def generate_result_template(machine_config):
     result = {"build_configurations":[]}
     return result
 
+def finish_test(p, result_vector):
+    out,err = p.communicate()
+    if p.returncode != 0:
+        print "Test failed: "
+        print "==============="
+        print err
+        print "==============="
+        return
+
+    result = json.loads(out)
+    result_vector.extend(result)
+
+
+
 def run_test(result_vector, test, configuration, machine_config, folder):
     print test, configuration, folder
 
@@ -51,14 +65,9 @@ def run_test(result_vector, test, configuration, machine_config, folder):
     # Build command string
     p = subprocess.Popen([test, folder, threads, localities, nodes,
                          machine_config["invocation_command"]],
-                         stdout=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    out,err = p.communicate()
-    result = json.loads(out)
-
-    result_vector.extend(result)
-
-    print out
+    finish_test(p, result_vector)
     #machine_config["invoke_parallel"]
 
 def run_test_series(build, machine_config, hpx_commit_id):
