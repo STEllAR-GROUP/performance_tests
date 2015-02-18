@@ -64,7 +64,7 @@ def build_test_result(config, parameters, result):
                "result":                    float(result)}
 
     if parameters:
-        result["additional_parameters"] = parameters,
+        result["additional_parameters"] = parameters
 
     return result
 
