@@ -104,5 +104,9 @@ if __name__ == "__main__":
         testseries_result = run_test_series(build, machine_config, hpx_commit_id)
         result["build_configurations"].append(testseries_result)
 
-    print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
+    #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
      
+    with open(sys.argv[3], 'wb') as outfile:
+#        outfile.write(json.dumps(result, sort_keys=True,indent=4, separators=(',', ': ')))
+        outfile.write(json.dumps(result))
+

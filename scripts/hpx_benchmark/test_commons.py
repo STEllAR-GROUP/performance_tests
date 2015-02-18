@@ -10,6 +10,9 @@ def error(msg):
     print(msg, file=sys.stderr)
 
 def get_config(test_name):
+
+    error("Test: " + test_name)
+
     if len(sys.argv) != 6:
         error("Error: Invalid command line arguments!")
         exit(1)
