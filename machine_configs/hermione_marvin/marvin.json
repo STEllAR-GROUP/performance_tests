@@ -1,0 +1,23 @@
+{
+    "machine_name": "hermione_marvin_noht",
+    "invocation_command": "/home/mstumpf/work/hpx_perf/run_marv.py ${THREADS} ${LOCALITIES} ${NODES} ${HPX_PROGRAM}",
+    "invoke_parallel": true,
+    "builds": [
+        {
+            "compiler": "gcc 4.9",
+            "boost": "boost 1.57.0",
+            "allocator": "tcmalloc",
+            "branch": "master",
+            "folder": "/home/mstumpf/work/hpx_perf/build"
+        }
+    ],
+    "configurations": [
+        [8,2,8],
+        [16,1,8],
+        [8,1,8],
+        [8,1,4],
+        [8,1,2],
+        [8,1,1]
+    ]
+}
+            
