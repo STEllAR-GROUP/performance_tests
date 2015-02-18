@@ -33,7 +33,7 @@ def build_command(config, hpx_command):
     
     command = config["invocation_command"]
 
-    hpx_command = hpx_command + " --hxp:threads " + config["threads"]
+    hpx_command = hpx_command + " --hpx:threads " + config["threads"]
 
     # Replace wildcards
     command = command.replace("${HPX_PROGRAM}", hpx_command)
