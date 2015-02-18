@@ -1,0 +1,1 @@
+{"build_configurations": [{"tests": [], "machine_name": "hermione_marvin_noht", "hpx_commit_id": "38d63897efe7f75a25c45e21e41ca97a045dbc60", "branch": "hpx_master", "boost": "boost 1.57.0", "allocator": "tcmalloc", "compiler": "gcc 4.9"}]}
