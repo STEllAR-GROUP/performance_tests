@@ -40,6 +40,17 @@
                     },
                     "timestamp":1422564504,
                     "result":105.0      
+                },
+                {
+                    "test_name": "best-test-ever",
+                    "num_threads_per_locality": 16,
+                    "num_localities_per_node": 2,
+                    "num_nodes": 8,
+                    "additional_parameters": {
+                        "important_parameter":"42"
+                    },
+                    "timestamp":1422664504,
+                    "result":105.0      
                 }
             ]
         }
