@@ -40,9 +40,12 @@ def open_testfile(filename):
     return file_json
 
 def get_platform_name(build_config):
-    platform_name = build_config['machine_name'] + ' - '    \
-                  + build_config['compiler'] + ' - '        \
-                  + build_config['boost'] + ' - '           \
+    platform_name = build_config['machine_name'] + ' ('                     \
+                  + str(build_config['num_threads_per_locality']) + '/'     \
+                  + str(build_config['num_localities_per_node']) + '/'      \
+                  + str(build_config['num_nodes']) + ') - '                 \
+                  + build_config['compiler'] + ' - '                        \
+                  + build_config['boost'] + ' - '                           \
                   + build_config['allocator']
     return platform_name
  
@@ -59,10 +62,7 @@ def get_tests(build_config):
     return build_config['tests']
 
 def get_test_name(test_data):
-    full_test_name = test_data['test_name'] + ' '                               \
-                   + str(test_data['num_threads_per_locality']) + '/'           \
-                   + str(test_data['num_localities_per_node']) + '/'            \
-                   + str(test_data['num_nodes'])
+    full_test_name = test_data['test_name']
 
     params = test_data['additional_parameters']
     for key in sorted(params.keys()):
@@ -88,7 +88,7 @@ def read_test_file_roughly(filename):
     file_json = open_testfile(filename)
 
     # Read file to tables
-    build_configs = file_json['build_configurations']
+    build_configs = file_json['machine_configurations']
     for build_config in build_configs:
         # generate platform name from config
         platform_name = get_platform_name(build_config)
