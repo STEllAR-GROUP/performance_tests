@@ -61,7 +61,7 @@ def finish_pending_tests():
 
     for i in range(len(pending_tests)):
         print("Waiting for test #" + str(i) + " to finish ...")
-        finish_test(test[i][0], test[i][1])
+        finish_test(pending_tests[i][0], pending_tests[i][1])
 
 test_id = 0
 def run_test(result_vector, test, configuration, machine_config, folder):
