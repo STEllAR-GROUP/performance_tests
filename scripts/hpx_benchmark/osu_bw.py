@@ -27,7 +27,8 @@ def run_test_with_windowsize(config, hpx_command, windowsize):
         value = float(row[1])
         size = row[0]
 
-        arguments = {"size": size}
+        arguments = { "size": size,
+                      "window": windowsize }
 
         results.append(build_test_result(config, arguments, value))
     
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     config = get_config("osu_bw")
 
     if config["localities"] * config["nodes"] != 2:
+        send_result([])
         exit(0)
 
     # Get executable path
@@ -52,7 +54,7 @@ if __name__ == "__main__":
 
     # Statically set the max-size
     #hpx_command = hpx_command + " --max-size 4096"
-    hpx_command = hpx_command + " --loop 200"
+    hpx_command = hpx_command + " --loop 20"
 
     results = []
     # Dynamically set the window-size
