@@ -56,20 +56,35 @@ def finish_test(p, result_vector):
 
 
 
+pending_tests = []
+def finish_pending_tests():
+
+    for i in range(len(pending_tests)):
+        print("Waiting for test #" + str(i) + " to finish ...")
+        finish_test(test[i][0], test[i][1])
+
+test_id = 0
 def run_test(result_vector, test, configuration, machine_config, folder):
-    print test, configuration, folder
+    global test_id
 
     threads     = str(configuration[0])
     localities  = str(configuration[1])
     nodes       = str(configuration[2])
+
+    print("#" + str(test_id) + ": " + test + " ("                               \
+              + threads + "/" + localities + "/" + nodes + ")")
 
     # Build command string
     p = subprocess.Popen([test, folder, threads, localities, nodes,
                          machine_config["invocation_command"]],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    finish_test(p, result_vector)
-    #machine_config["invoke_parallel"]
+    if machine_config["invoke_parallel"]:
+        pending_tests.append([p, result_vector])
+    else:
+        finish_test(p, result_vector)
+    
+    test_id = test_id + 1
 
 def run_test_series(build, machine_config, hpx_commit_id):
 
@@ -104,6 +119,8 @@ if __name__ == "__main__":
     for build in machine_config["builds"]:
         testseries_result = run_test_series(build, machine_config, hpx_commit_id)
         result["build_configurations"].append(testseries_result)
+
+    finish_pending_tests()
 
     #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
      
