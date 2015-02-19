@@ -59,9 +59,6 @@ def run_command(command):
 def build_test_result(config, parameters, result):
 
     result = { "test_name":                 config["name"],
-               "num_threads_per_locality":  int(config["threads"]),
-               "num_localities_per_node":   int(config["localities"]),
-               "num_nodes":                 int(config["nodes"]),
                "timestamp":                 int(time.time()),
                "result":                    float(result)}
 

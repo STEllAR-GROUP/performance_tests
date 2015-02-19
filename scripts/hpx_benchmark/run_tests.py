@@ -39,7 +39,7 @@ def load_machine_config(configfile):
     exit(1)
     
 def generate_result_template(machine_config):
-    result = {"build_configurations":[]}
+    result = {"machine_configurations":[]}
     return result
 
 def finish_test(p, result_vector):
@@ -88,20 +88,27 @@ def run_test(result_vector, test, configuration, machine_config, folder):
 
 def run_test_series(build, machine_config, hpx_commit_id):
 
-    result = { "machine_name":  machine_config["machine_name"],
-               "compiler":      build["compiler"],
-               "boost":         build["boost"],
-               "allocator":     build["allocator"], 
-               "branch":        ("hpx_" + build["branch"]),
-               "hpx_commit_id": hpx_commit_id,
-               "tests":         [] }
+    results = []
 
-    for test in active_tests:
-        for configuration in machine_config["configurations"]:
+    for configuration in machine_config["configurations"]:
+        result = { "machine_name":              machine_config["machine_name"],
+                   "compiler":                  build["compiler"],
+                   "boost":                     build["boost"],
+                   "allocator":                 build["allocator"], 
+                   "branch":                    ("hpx_" + build["branch"]),
+                   "hpx_commit_id":             hpx_commit_id,
+                   "num_threads_per_locality":  configuration[0],
+                   "num_localities_per_node":   configuration[1],
+                   "num_nodes":                 configuration[2],
+                   "tests":                     [] }
+
+        for test in active_tests:
             run_test(result["tests"], test, configuration, machine_config,
                      build["folder"]) 
+
+        results.append(result)
         
-    return result
+    return results
 
 if __name__ == "__main__":
     
@@ -117,8 +124,8 @@ if __name__ == "__main__":
     result = generate_result_template(machine_config)
 
     for build in machine_config["builds"]:
-        testseries_result = run_test_series(build, machine_config, hpx_commit_id)
-        result["build_configurations"].append(testseries_result)
+        testseries_results = run_test_series(build, machine_config, hpx_commit_id)
+        result["machine_configurations"].extend(testseries_results)
 
     finish_pending_tests()
 
