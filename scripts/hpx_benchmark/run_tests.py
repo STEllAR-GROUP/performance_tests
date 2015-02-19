@@ -9,8 +9,8 @@ import subprocess
 
 scriptpath = os.path.dirname(os.path.realpath(__file__))
 
-active_tests = [ "./osu_latency.py",
-                 "./osu_bw.py" ]
+active_tests = [ "osu_latency.py",
+                 "osu_bw.py" ]
 
 
 
@@ -75,7 +75,7 @@ def run_test(result_vector, test, configuration, machine_config, folder):
               + threads + "/" + localities + "/" + nodes + ")")
 
     # Build command string
-    p = subprocess.Popen([test, folder, threads, localities, nodes,
+    p = subprocess.Popen([scriptpath + os.sep + test, folder, threads, localities, nodes,
                          machine_config["invocation_command"]],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
