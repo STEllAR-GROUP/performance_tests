@@ -1,5 +1,5 @@
 {
-    "build_configurations": [
+    "machine_configurations": [
         {
             "machine_name": "test",
             "compiler": "gcc 4.8",
@@ -7,12 +7,12 @@
             "allocator": "tcmalloc",
             "branch": "hpx_master",
             "hpx_commit_id": "9791ebb58822daf722308abf8c2ede4bbf9b007e",
+            "num_threads_per_locality": 16,
+            "num_localities_per_node": 2,
+            "num_nodes": 8,
             "tests": [
                 {
                     "test_name": "best-test-ever",
-                    "num_threads_per_locality": 16,
-                    "num_localities_per_node": 2,
-                    "num_nodes": 8,
                     "additional_parameters": {
                         "important_parameter":"42"
                     },
@@ -21,9 +21,6 @@
                 },
                 {
                     "test_name": "best-test-ever",
-                    "num_threads_per_locality": 16,
-                    "num_localities_per_node": 2,
-                    "num_nodes": 8,
                     "additional_parameters": {
                         "important_parameter":"42"
                     },
@@ -32,9 +29,6 @@
                 },
                 {
                     "test_name": "best-test-ever",
-                    "num_threads_per_locality": 16,
-                    "num_localities_per_node": 2,
-                    "num_nodes": 8,
                     "additional_parameters": {
                         "important_parameter":"42"
                     },
@@ -43,9 +37,6 @@
                 },
                 {
                     "test_name": "best-test-ever",
-                    "num_threads_per_locality": 16,
-                    "num_localities_per_node": 2,
-                    "num_nodes": 8,
                     "additional_parameters": {
                         "important_parameter":"42"
                     },

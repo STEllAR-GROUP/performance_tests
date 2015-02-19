@@ -4,7 +4,7 @@
     "required":true,
     "additionalProperties":false,
     "properties":{
-        "build_configurations": { 
+        "machine_configurations": { 
             "type":"array",
             "required":true,
             "items":
@@ -37,6 +37,18 @@
                             "type":"string",
                             "required":true
                         },
+                        "num_threads_per_locality": {
+                            "type":"number",
+                            "required":true
+                        },
+                        "num_localities_per_node": {
+                            "type":"number",
+                            "required":true
+                        },
+                        "num_nodes": {
+                            "type":"number",
+                            "required":true
+                        },
                         "tests": {
                             "type":"array",
                             "required":true,
@@ -48,18 +60,6 @@
                                 "properties":{
                                     "test_name": {
                                         "type":"string",
-                                        "required":true
-                                    },
-                                    "num_threads_per_locality": {
-                                        "type":"number",
-                                        "required":true
-                                    },
-                                    "num_localities_per_node": {
-                                        "type":"number",
-                                        "required":true
-                                    },
-                                    "num_nodes": {
-                                        "type":"number",
                                         "required":true
                                     },
                                     "additional_parameters": {

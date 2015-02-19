@@ -154,7 +154,7 @@ def ensure_test_exists(test_name):
     return test_id
 
 def insert_testrun(build_id, platform_id, test_id, test_time, test_result):
-    
+    print("Adding " + str(build_id) + "-" + str(test_id) + "-" + str(platform_id) + "-" + str(test_time)) 
     # check if test already exists
     cur.execute("SELECT id FROM test_runs WHERE "                 \
                     + "build_id='"   + str(build_id)    + "' AND "\
@@ -172,12 +172,12 @@ def insert_testrun(build_id, platform_id, test_id, test_time, test_result):
                                + str(test_time)   + "," \
                                + str(test_result) + ")")
 
-        #print("New testrun:")
-        #print("\tbuild_id:    " + str(build_id))
-        #print("\tplatform_id: " + str(platform_id))
-        #print("\ttest_id:     " + str(test_id))
-        #print("\ttest_time:   " + str(test_time))
-        #print("\ttest_result: " + str(test_result))
+        print("New testrun:")
+        print("\tbuild_id:    " + str(build_id))
+        print("\tplatform_id: " + str(platform_id))
+        print("\ttest_id:     " + str(test_id))
+        print("\ttest_time:   " + str(test_time))
+        print("\ttest_result: " + str(test_result))
 
 def clear_database():
     cur.execute("DELETE FROM builds")
