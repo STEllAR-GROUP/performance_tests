@@ -15,13 +15,14 @@ def get_config(test_name):
 
     if len(sys.argv) != 6:
         error("Error: Invalid command line arguments!")
+        error("Expected: <hpx_dir> <threads> <localities> <nodes> <command>")
         exit(1)
 
     config = { "name":                test_name,
                "hpx_dir":             sys.argv[1],
-               "threads":             sys.argv[2],
-               "localities":          sys.argv[3],
-               "nodes":               sys.argv[4],
+               "threads":             int(sys.argv[2]),
+               "localities":          int(sys.argv[3]),
+               "nodes":               int(sys.argv[4]),
                "invocation_command":  sys.argv[5] } 
 
     return config
@@ -33,13 +34,13 @@ def build_command(config, hpx_command):
     
     command = config["invocation_command"]
 
-    hpx_command = hpx_command + " --hpx:threads " + config["threads"]
+    hpx_command = hpx_command + " --hpx:threads " + str(config["threads"])
 
     # Replace wildcards
     command = command.replace("${HPX_PROGRAM}", hpx_command)
-    command = command.replace("${THREADS}",     config["threads"])
-    command = command.replace("${LOCALITIES}",  config["localities"])
-    command = command.replace("${NODES}",       config["nodes"])
+    command = command.replace("${THREADS}",     str(config["threads"]))
+    command = command.replace("${LOCALITIES}",  str(config["localities"]))
+    command = command.replace("${NODES}",       str(config["nodes"]))
 
     return command
 

@@ -3,16 +3,12 @@
 from test_commons import *
 from test_parsing import *
 
-if __name__ == "__main__":
-    
-    # Get config
-    config = get_config("osu_bw")
-
-    # Get executable path
-    hpx_executable = get_hpx_executable(config, "osu_bw")
+def run_test_with_windowsize(config, hpx_command, windowsize):
+   
+    hpx_command_with_winsize = hpx_command + " --window-size " + str(windowsize) 
 
     # Build the execution string
-    invocation_command = build_command(config, hpx_executable)
+    invocation_command = build_command(config, hpx_command_with_winsize)
 
     # Run the test
     out = run_command(invocation_command)
@@ -35,5 +31,36 @@ if __name__ == "__main__":
 
         results.append(build_test_result(config, arguments, value))
     
+    # Throw if no results read 
+    if len(results) < 1:
+        error("Unable to read results!")
+        exit(1)
+
+    return results
+ 
+
+if __name__ == "__main__":
+    
+    # Get config
+    config = get_config("osu_bw")
+
+    if config["localities"] * config["nodes"] != 2:
+        exit(0)
+
+    # Get executable path
+    hpx_command = get_hpx_executable(config, "osu_bw")
+
+    # Statically set the max-size
+    #hpx_command = hpx_command + " --max-size 4096"
+    hpx_command = hpx_command + " --loop 200"
+
+    results = []
+    # Dynamically set the window-size
+    for win_size in [1,10,20,100]:
+        current_results = run_test_with_windowsize(config, hpx_command, win_size)
+        results.extend(current_results)
+
+
+    # Send results via writing the json string to stdout
     send_result(results)
 
