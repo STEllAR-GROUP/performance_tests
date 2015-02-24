@@ -11,8 +11,8 @@ import MySQLdb
 import time
 
 mysql_host="localhost"
-mysql_user="graphs"
-mysql_db="graphs_v2"
+mysql_user="yn87erow"
+mysql_db="perfOmatic"
 
 
 db = MySQLdb.connect(host=mysql_host,
