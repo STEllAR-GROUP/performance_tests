@@ -50,7 +50,7 @@ def get_platform_name(build_config):
     return platform_name
  
 def get_build_configs(file_content):
-    return file_content['build_configurations']    
+    return file_content['machine_configurations']    
 
 def get_branch_name(build_config):
     return build_config['branch']
@@ -68,7 +68,7 @@ def get_test_name(test_data):
     for key in sorted(params.keys()):
         param = params[key]
         full_test_name = full_test_name + ' '   \
-                       + key + "=" + param
+                       + str(key) + "=" + str(param)
 
     return full_test_name
 
