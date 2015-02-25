@@ -10,10 +10,11 @@ import refresh_test_combos
 # This should only be necessary in the case of a deletion.
 # Don't use this too much, as it messes with the ids horribly.
 # (And with that destroys every static html link to a graph setup)
-db_interface.clear_database()
+#db_interface.clear_database()
 
 
 for filename in test_data_interface.get_filenames():
+    print("Processing file '" + filename + "'...")
     file_content = test_data_interface.open_testfile(filename)
     
     # go through all build configs in current file

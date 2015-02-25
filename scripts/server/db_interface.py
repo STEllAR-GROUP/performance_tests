@@ -154,7 +154,7 @@ def ensure_test_exists(test_name):
     return test_id
 
 def insert_testrun(build_id, platform_id, test_id, test_time, test_result):
-    print("Adding " + str(build_id) + "-" + str(test_id) + "-" + str(platform_id) + "-" + str(test_time)) 
+    #print("Adding " + str(build_id) + "-" + str(test_id) + "-" + str(platform_id) + "-" + str(test_time)) 
     # check if test already exists
     cur.execute("SELECT id FROM test_runs WHERE "                 \
                     + "build_id='"   + str(build_id)    + "' AND "\
