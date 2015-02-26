@@ -8,7 +8,7 @@ import sys
 import subprocess
 
 scriptpath = os.path.dirname(os.path.realpath(__file__))
-global machine_config_path = ""
+machine_config_path = ""
 
 active_tests = [ "osu_latency.py",
                  "osu_bw.py" ]
@@ -70,7 +70,6 @@ def finish_pending_tests():
 test_id = 0
 def run_test(result_vector, test, configuration, machine_config, folder):
     global test_id
-    global machine_config_path
 
     threads     = str(configuration[0])
     localities  = str(configuration[1])
