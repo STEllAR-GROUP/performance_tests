@@ -146,6 +146,12 @@ if __name__ == "__main__":
         print ("Error: Unable to run tests.")
         exit(1)
      
+    # create directory
+    output_path = os.path.dirname(os.path.realpath(sys.argv[3]))
+    try:
+        os.makedirs(output_path, 0755)
+    except:
+        pass
     with open(sys.argv[3], 'wb') as outfile:
         #outfile.write(json.dumps(result, sort_keys=True,indent=4, separators=(',', ': ')))
         outfile.write(json.dumps(result))
