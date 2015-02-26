@@ -116,8 +116,7 @@ def run_test_series(build, machine_config, hpx_commit_id):
     return results
 
 if __name__ == "__main__":
-    global machine_config_path
-    
+
     if len(sys.argv) != 4:
         print("Usage:")
         print("\t" + sys.argv[0] + " <machine-config> <hpx-commit-id> <output>")
