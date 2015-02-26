@@ -12,7 +12,7 @@ scriptpath = os.path.dirname(os.path.realpath(__file__))
 active_tests = [ "osu_latency.py",
                  "osu_bw.py" ]
 
-
+got_errors = False
 
 def load_machine_config(configfile):
   
@@ -43,8 +43,11 @@ def generate_result_template(machine_config):
     return result
 
 def finish_test(p, result_vector):
+    global got_errors
+
     out,err = p.communicate()
     if p.returncode != 0:
+        got_errors = True
         print "Test failed: "
         print "==============="
         print err
@@ -135,3 +138,7 @@ if __name__ == "__main__":
 #        outfile.write(json.dumps(result, sort_keys=True,indent=4, separators=(',', ': ')))
         outfile.write(json.dumps(result))
 
+    if got_errors:
+        exit(1)
+
+    exit(0)
