@@ -111,8 +111,9 @@ def run_test_series(build, machine_config, hpx_commit_id):
             run_test(result["tests"], test, configuration, machine_config,
                      build["folder"]) 
 
-        results.append(result)
-        
+        if len(result["tests"]) > 0:
+            results.append(result)
+       
     return results
 
 if __name__ == "__main__":
