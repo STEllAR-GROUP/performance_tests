@@ -8,6 +8,7 @@ import sys
 import subprocess
 
 scriptpath = os.path.dirname(os.path.realpath(__file__))
+global machine_config_path = ""
 
 active_tests = [ "osu_latency.py",
                  "osu_bw.py" ]
@@ -69,6 +70,7 @@ def finish_pending_tests():
 test_id = 0
 def run_test(result_vector, test, configuration, machine_config, folder):
     global test_id
+    global machine_config_path
 
     threads     = str(configuration[0])
     localities  = str(configuration[1])
@@ -78,9 +80,10 @@ def run_test(result_vector, test, configuration, machine_config, folder):
               + threads + "/" + localities + "/" + nodes + ")")
 
     # Build command string
-    p = subprocess.Popen([scriptpath + os.sep + test, folder, threads, localities, nodes,
+    p = subprocess.Popen([scriptpath + os.sep + test, machine_config_path + os.sep + folder, threads, localities, nodes,
                          machine_config["invocation_command"]],
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         cwd = machine_config_path)
 
     if machine_config["invoke_parallel"]:
         pending_tests.append([p, result_vector])
@@ -114,6 +117,7 @@ def run_test_series(build, machine_config, hpx_commit_id):
     return results
 
 if __name__ == "__main__":
+    global machine_config_path
     
     if len(sys.argv) != 4:
         print("Usage:")
@@ -122,20 +126,29 @@ if __name__ == "__main__":
         exit(1)
 
     machine_config = load_machine_config(sys.argv[1])
+    machine_config_path = os.path.dirname(os.path.realpath(sys.argv[1]))
     hpx_commit_id = sys.argv[2]
     
     result = generate_result_template(machine_config)
 
     for build in machine_config["builds"]:
+        build_path = machine_config_path + os.sep + build["folder"]
+        if not os.path.isdir(build_path):
+            print("Folder '" + build_path + "' does not exist. Skipping ...")
+            continue
         testseries_results = run_test_series(build, machine_config, hpx_commit_id)
         result["machine_configurations"].extend(testseries_results)
 
     finish_pending_tests()
 
     #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
+    
+    if len(result["machine_configurations"]) < 1:
+        print ("Error: Unable to run tests.")
+        exit(1)
      
     with open(sys.argv[3], 'wb') as outfile:
-#        outfile.write(json.dumps(result, sort_keys=True,indent=4, separators=(',', ': ')))
+        #outfile.write(json.dumps(result, sort_keys=True,indent=4, separators=(',', ': ')))
         outfile.write(json.dumps(result))
 
     if got_errors:
