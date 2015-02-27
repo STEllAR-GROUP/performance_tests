@@ -111,8 +111,7 @@ def run_test_series(build, machine_config, hpx_commit_id):
             run_test(result["tests"], test, configuration, machine_config,
                      build["folder"]) 
 
-        if len(result["tests"]) > 0:
-            results.append(result)
+        results.append(result)
        
     return results
 
@@ -129,6 +128,7 @@ if __name__ == "__main__":
     hpx_commit_id = sys.argv[2]
     
     result = generate_result_template(machine_config)
+    machine_configurations = []
 
     for build in machine_config["builds"]:
         build_path = machine_config_path + os.sep + build["folder"]
@@ -136,16 +136,22 @@ if __name__ == "__main__":
             print("Folder '" + build_path + "' does not exist. Skipping ...")
             continue
         testseries_results = run_test_series(build, machine_config, hpx_commit_id)
-        result["machine_configurations"].extend(testseries_results)
+        machine_configurations.extend(testseries_results)
 
+    # wait for asynchronous runs to finish
     finish_pending_tests()
 
-    #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
-    
+    # filter out tests without results
+    for machine_configuration in machine_configurations:
+        if len(machine_configuration["tests"]) > 0:
+            result["machine_configurations"].append(machine_configuration)
+
     if len(result["machine_configurations"]) < 1:
-        print ("Error: Unable to run tests.")
+        print ("Error: Tests didn't return any results.")
         exit(1)
      
+    #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
+
     # create directory
     output_path = os.path.dirname(os.path.realpath(sys.argv[3]))
     try:
