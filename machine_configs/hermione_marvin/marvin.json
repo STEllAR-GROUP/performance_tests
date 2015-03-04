@@ -2,6 +2,7 @@
     "machine_name": "hermione_marvin_noht",
     "invocation_command": "./run_marv.py ${THREADS} ${LOCALITIES} ${NODES} ${HPX_PROGRAM}",
     "invoke_parallel": true,
+    "parcelport": "mpi",
     "builds": [
         {
             "compiler": "gcc 4.9",

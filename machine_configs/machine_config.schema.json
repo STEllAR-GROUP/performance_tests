@@ -16,6 +16,11 @@
             "type":"boolean",
             "required":true
         },
+        "parcelport": {
+            "type":"string",
+            "required":true,
+            "enum":["tcp","mpi"]
+        },
         "builds": {
             "type":"array",
             "required":true,
@@ -35,7 +40,12 @@
                         },
                         "allocator": {
                             "type":"string",
-                            "required":"true"
+                            "required":"true",
+                            "enum": [
+                                "tcmalloc",
+                                "jemalloc",
+                                "system"
+                            ]
                         },
                         "branch": {
                             "type":"string",
