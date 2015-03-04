@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import sys
 
 import db_interface
 import test_data_interface
@@ -12,6 +13,14 @@ import refresh_test_combos
 # (And with that destroys every static html link to a graph setup)
 #db_interface.clear_database()
 
+if len(sys.argv) < 2:
+    print("Usage:")
+    print("")
+    print("\t" + sys.argv[0] + " <data_repository_path>")
+    print("")
+    exit(1)
+
+test_data_interface.set_repo_path(sys.argv[1])
 
 for filename in test_data_interface.get_filenames():
     print("Processing file '" + filename + "'...")

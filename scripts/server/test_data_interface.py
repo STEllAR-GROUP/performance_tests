@@ -4,14 +4,24 @@ import jsonschema
 import os
 from sets import Set
 
-repo_path = os.path.dirname(os.path.realpath(__file__)) + os.sep + ".."         \
-                                                        + os.sep + ".."
+repo_path = ""
 
-# Create schema validator
-with open(repo_path + os.sep + 'test_data.schema.json') as f:
-    schema = json.load(f)
-schema_validator = jsonschema.Draft3Validator(schema)
+schema_validator = {}
 
+def set_repo_path(path):
+    global repo_path
+    global schema_validator
+    
+    repo_path = path
+
+    # Create schema validator
+    with open(repo_path + os.sep + 'test_data.schema.json') as f:
+        schema = json.load(f)
+    schema_validator = jsonschema.Draft3Validator(schema)
+
+
+set_repo_path(os.path.dirname(os.path.realpath(__file__)) + os.sep + ".."       \
+                                                          + os.sep + "..")
 
 def get_filenames():
     filenames = []
