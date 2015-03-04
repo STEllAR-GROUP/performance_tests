@@ -52,6 +52,8 @@ def build_command(config, hpx_command):
 
 def run_command(command):
     
+    error("Running: " + command)
+
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                               stderr=subprocess.PIPE)
     
