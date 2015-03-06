@@ -19,8 +19,8 @@ nodes = sys.argv[3]
 
 mpi_processes = str(int(nodes) * int(localities))
 
-call_string = ['srun', '-p', 'marv_noht', '-t', '00:15:00', '-n'+mpi_processes,
-                       '-N'+nodes]
+call_string = ['salloc', '-p', 'marv_noht', '-t', '00:15:00', '-n'+mpi_processes,
+                       '-N'+nodes, 'mpirun']
 
 call_string.extend(sys.argv[4:])
 
