@@ -1,6 +1,8 @@
 import json
 import jsonschema
 
+import subprocess
+
 import os
 from sets import Set
 
@@ -22,6 +24,16 @@ def set_repo_path(path):
 
 set_repo_path(os.path.dirname(os.path.realpath(__file__)) + os.sep + ".."       \
                                                           + os.sep + "..")
+def get_current_commit():
+    p = subprocess.Popen(["git", "rev-parse", "--verify", "HEAD"],
+                         cwd=repo_path,
+                         stdout=subprocess.PIPE)
+    out,err = p.communicate()
+    if p.returncode:
+        print("Error: Can't fetch current commit id of data repository!")
+        exit(1)
+    return out.strip()
+
 
 def get_filenames():
     filenames = []
@@ -31,7 +43,27 @@ def get_filenames():
                 filenames.append(path + os.sep + testfile)
     return filenames
     
+def get_filenames_diff(commit_id, old_commit_id):
+    filenames = []
+    p = subprocess.Popen(["git", "diff", "--name-only", "--diff-filter=ACMRTUXB",
+                          "--relative=test_data",
+                          old_commit_id, commit_id],
+                         cwd=repo_path,
+                         stdout=subprocess.PIPE)
+    out,err = p.communicate()
+    if p.returncode:
+        return None
+
+    files=out.split('\n')
     
+    filenames = []
+    for f in files:
+        f = f.strip()
+        if f:
+            filenames.append(os.path.abspath(
+                os.path.join(repo_path + os.sep + "test_data", f)))
+
+    return filenames 
 
 def validate_test_file(file_json, filename):
     errors = sorted(schema_validator.iter_errors(file_json), key=lambda e: e.path)
