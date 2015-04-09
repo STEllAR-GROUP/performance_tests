@@ -79,7 +79,7 @@ def run_test(result_vector, test, configuration, machine_config, folder):
               + threads + "/" + localities + "/" + nodes + ")")
 
     # Build command string
-    p = subprocess.Popen([scriptpath + os.sep + test, machine_config_path + os.sep + folder, threads, localities, nodes,
+    p = subprocess.Popen([scriptpath + os.sep + test, machine_config_path + os.sep + folder, threads, localities, nodes, machine_config["parcelport"],
                          machine_config["invocation_command"]],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          cwd = machine_config_path)

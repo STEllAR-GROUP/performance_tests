@@ -13,9 +13,9 @@ def get_config(test_name):
 
     error("Test: " + test_name)
 
-    if len(sys.argv) != 6:
+    if len(sys.argv) != 7:
         error("Error: Invalid command line arguments!")
-        error("Expected: <hpx_dir> <threads> <localities> <nodes> <command>")
+        error("Expected: <hpx_dir> <threads> <localities> <nodes> <parcelport> <command>")
         exit(1)
 
     config = { "name":                test_name,
@@ -23,7 +23,8 @@ def get_config(test_name):
                "threads":             int(sys.argv[2]),
                "localities":          int(sys.argv[3]),
                "nodes":               int(sys.argv[4]),
-               "invocation_command":  sys.argv[5] } 
+               "parcelport":          sys.argv[5],
+               "invocation_command":  sys.argv[6] } 
 
     return config
 
@@ -36,6 +37,11 @@ def build_command(config, hpx_command):
 
     hpx_command = hpx_command + " --hpx:threads " + str(config["threads"])
 
+    # add parcelport flags
+    if config["parcelport"] == "mpi":
+        hpx_command = hpx_command + " --hpx:ini hpx.parcel.tcp.enable=0"
+        hpx_command = hpx_command + " --hpx:ini hpx.parcel.bootstrap=mpi"
+
     # Replace wildcards
     command = command.replace("${HPX_PROGRAM}", hpx_command)
     command = command.replace("${THREADS}",     str(config["threads"]))
@@ -46,6 +52,8 @@ def build_command(config, hpx_command):
 
 def run_command(command):
     
+    error("Running: " + command)
+
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                               stderr=subprocess.PIPE)
     
