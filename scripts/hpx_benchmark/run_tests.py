@@ -11,22 +11,21 @@ scriptpath = os.path.dirname(os.path.realpath(__file__))
 machine_config_path = ""
 
 active_tests = [ "osu_latency.py",
-                 "osu_bw.py",
-                 "foreach_scaling.py" ]
+                 "osu_bw.py" ]
 
 got_errors = False
 
 def load_machine_config(configfile):
-
+  
     with open(scriptpath + os.sep + ".." + os.sep + ".." + os.sep               \
               + "machine_configs" + os.sep + "machine_config.schema.json") as f:
         json_schema = json.load(f)
     json_validator = jsonschema.Draft3Validator(json_schema)
-
+    
 
     with open(configfile) as f:
         machine_config = json.load(f)
-
+    
     errors = sorted(json_validator.iter_errors(machine_config), key=lambda e: e.path)
 
     if len(errors) == 0:
@@ -39,7 +38,7 @@ def load_machine_config(configfile):
         print(error)
 
     exit(1)
-
+    
 def generate_result_template(machine_config):
     result = {"machine_configurations":[]}
     return result
@@ -89,7 +88,7 @@ def run_test(result_vector, test, configuration, machine_config, folder):
         pending_tests.append([p, result_vector])
     else:
         finish_test(p, result_vector)
-
+    
     test_id = test_id + 1
 
 def run_test_series(build, machine_config, hpx_commit_id):
@@ -100,7 +99,7 @@ def run_test_series(build, machine_config, hpx_commit_id):
         result = { "machine_name":              machine_config["machine_name"],
                    "compiler":                  build["compiler"],
                    "boost":                     build["boost"],
-                   "allocator":                 build["allocator"],
+                   "allocator":                 build["allocator"], 
                    "branch":                    ("hpx_" + build["branch"]),
                    "hpx_commit_id":             hpx_commit_id,
                    "num_threads_per_locality":  configuration[0],
@@ -110,10 +109,10 @@ def run_test_series(build, machine_config, hpx_commit_id):
 
         for test in active_tests:
             run_test(result["tests"], test, configuration, machine_config,
-                     build["folder"])
+                     build["folder"]) 
 
         results.append(result)
-
+       
     return results
 
 if __name__ == "__main__":
@@ -127,7 +126,7 @@ if __name__ == "__main__":
     machine_config = load_machine_config(sys.argv[1])
     machine_config_path = os.path.dirname(os.path.realpath(sys.argv[1]))
     hpx_commit_id = sys.argv[2]
-
+    
     result = generate_result_template(machine_config)
     machine_configurations = []
 
@@ -150,7 +149,7 @@ if __name__ == "__main__":
     if len(result["machine_configurations"]) < 1:
         print ("Error: Tests didn't return any results.")
         exit(1)
-
+     
     #print json.dumps(result, sort_keys=True,indent=4, separators=(',', ': '))
 
     # create directory
