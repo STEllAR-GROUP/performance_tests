@@ -1,4 +1,4 @@
-from __future__ import print_function 
+from __future__ import print_function
 
 import os
 import sys
@@ -24,7 +24,7 @@ def get_config(test_name):
                "localities":          int(sys.argv[3]),
                "nodes":               int(sys.argv[4]),
                "parcelport":          sys.argv[5],
-               "invocation_command":  sys.argv[6] } 
+               "invocation_command":  sys.argv[6] }
 
     return config
 
@@ -32,7 +32,7 @@ def get_hpx_executable(config, name):
     return config["hpx_dir"] + os.sep + "bin" + os.sep + name
 
 def build_command(config, hpx_command):
-    
+
     command = config["invocation_command"]
 
     hpx_command = hpx_command + " --hpx:threads " + str(config["threads"])
@@ -51,12 +51,12 @@ def build_command(config, hpx_command):
     return command
 
 def run_command(command):
-    
+
     error("Running: " + command)
 
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                               stderr=subprocess.PIPE)
-    
+
     out,err = p.communicate()
     if p.returncode != 0:
         error("Test failed: ")
@@ -65,11 +65,11 @@ def run_command(command):
 
     return out
 
-def build_test_result(config, parameters, result):
+def build_test_result(config, parameters, test_result):
 
     result = { "test_name":                 config["name"],
                "timestamp":                 int(time.time()),
-               "result":                    float(result)}
+               "result":                    float(test_result)}
 
     if parameters:
         result["additional_parameters"] = parameters
@@ -81,5 +81,3 @@ def send_result(results):
         results = [results]
 
     print(json.dumps(results))
-
-
